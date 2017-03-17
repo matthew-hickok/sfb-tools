@@ -1,4 +1,4 @@
-﻿if(!(Get-Module SkypeforBusiness) -and !(Get-Module SkypeforBusiness)) {
+﻿if(!(Get-Module SkypeforBusiness) -and !(Get-Module Lync)) {
 
 Write-Host "Install admin tools -- the Lync/SfB module is not installed"
 
