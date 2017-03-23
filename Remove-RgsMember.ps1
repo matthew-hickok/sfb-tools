@@ -1,4 +1,24 @@
 ﻿function Remove-RgsMember {
+<#
+.SYNOPSIS
+Removes single or multiple users from specific or all response groups.
+.Description
+Remove-RgsMember uses takes users via the pipeline and removes them from the desired response groups. When specifying the groups, it will remove all users from just those groups. When specifying all groups with the switch, it willgo through all groups they are member of and remove them.  
+.PARAMETER User
+The user(s) to remove. The user needs to be a SIP address in the form "sip:user@sipdomain". This is required and can utilize the pipeline.
+.PARAMETER ResponseGroup
+Used to specify individual response groups. Multiple response groups can be specified and should be specified by their 'Name' property. This parameter cannot be used with the AllGroups switch.
+.PARAMETER AllGroups
+Used to remove the specified users from all response groups they are a member of. This parameter cannot be used with the ResponseGroup parameter.
+.EXAMPLE
+"sip:user1@sipdomain" | Remove-RgsMember -AllGroups -Verbose
+.EXAMPLE
+sip:user1@sipdomain,sip:user2@sipdomain | Remove-RgsMember -ResponseGroup RG1
+.EXAMPLE
+Remove-RgsMember -User sip:user1@sipdomain -ResponseGroup RG1,RG2
+.EXAMPLE
+Get-Content .\users.txt | Remove-RgsMember -AllGroups -Verbose 
+#>
 
     [CmdletBinding()]
     param (
@@ -17,13 +37,19 @@
         [switch]$AllGroups
     )
 
-    BEGIN {}
+    BEGIN {
+        if ($AllGroups) {
+            Write-Verbose -Message "Users will be remoed from all response groups"
+        }
+        else {
+            Write-Verbose -Message "Users will be removed from the specified response groups"
+        }
+    }
 
     PROCESS {
 
         #Removing user(s) from all RGs
         if($AllGroups) {
-            Write-Verbose -Message "User(s) will be removed from all response groups"
             foreach ($member in $User) {
                 Write-Verbose -Message "Removing $member"
                 try {
@@ -38,7 +64,7 @@
                     foreach ($group in $groupsContainingUser) {
                         try{
                             Write-Verbose -Message "Removing $member from $($group.Name)"
-                            $group.AgentsByUri.Remove($member)  
+                            [void]$group.AgentsByUri.Remove($member)  
                             Set-CsRgsAgentGroup -Instance $group
                         }
                         catch {
@@ -56,14 +82,13 @@
 
         #Remove user(s) only from specific RGs
         else {
-            Write-Verbose -Message "User(s) will be removed from specified RGs"
             foreach ($member in $User) {
                 Write-Verbose -Message "Starting removals for $member"
                 foreach($group in $ResponseGroup) {
                     try{
                         Write-Verbose -Message "Removing $member from $group"
                         $rg = Get-CsRgsAgentGroup -Name $group
-                        $rg.AgentsByUri.Remove($member)
+                        [void]$rg.AgentsByUri.Remove($member)
                         Set-CsRgsAgentGroup -Instance $rg 
                     }
                     catch {
