@@ -39,7 +39,7 @@ Get-Content .\users.txt | Remove-RgsMember -AllGroups -Verbose
 
     BEGIN {
         if ($AllGroups) {
-            Write-Verbose -Message "Users will be remoed from all response groups"
+            Write-Verbose -Message "Users will be removed from all response groups"
         }
         else {
             Write-Verbose -Message "Users will be removed from the specified response groups"
@@ -57,7 +57,7 @@ Get-Content .\users.txt | Remove-RgsMember -AllGroups -Verbose
                     Write-Verbose -Message "$member is in $($groupsContainingUser.Count) groups"
                 }
                 catch {
-                    Write-Verbose "Unable to get RG information for user "
+                    Write-Verbose "Unable to get response group information for user "
                 }
 
                 if($groupsContainingUser.Count -gt 0) {
@@ -74,7 +74,7 @@ Get-Content .\users.txt | Remove-RgsMember -AllGroups -Verbose
                 }
 
                 else {
-                    Write-Verbose "Not attempting removal as the $member was not in any RGs"
+                    Write-Verbose "Not attempting removal as $member was not in any response groups"
                 }
    
             }
