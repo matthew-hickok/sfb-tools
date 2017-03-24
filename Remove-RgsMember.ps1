@@ -26,7 +26,7 @@ Get-Content .\users.txt | Remove-RgsMember -AllGroups -Verbose
         [Parameter(Mandatory=$True,
                     ValueFromPipeline=$True,
                     HelpMessage="User(s) to remove (sip:user.sipdomain")]
-        [string]$User,
+        [string[]]$User,
 
         [Parameter(ParameterSetName="specifiedGroups",
                     HelpMessage="One or more RGs, separated by commas")]
