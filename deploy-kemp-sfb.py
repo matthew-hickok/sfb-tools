@@ -5,7 +5,7 @@ from python_kemptech_api import LoadMaster
 # connection parameters
 LoadMaster_IP = '10.0.3.72' # Your LoadMaster’s administrative IP
 LoadMaster_User = 'bal' # Your LoadMaster’s Login User
-LoadMaster_Password = 'Mkapc1n!' # Your LoadMaster’s User’s Password
+LoadMaster_Password = 'my_pass' # Your LoadMaster’s User’s Password
 LoadMaster_Port = '443' # By default this is 443.
 
 # build the LoadMaster object
