@@ -5,7 +5,7 @@ from python_kemptech_api import LoadMaster
 # connection parameters
 LoadMaster_IP = '10.0.3.72' # Your LoadMaster’s administrative IP
 LoadMaster_User = 'bal' # Your LoadMaster’s Login User
-LoadMaster_Password = 'my_pass' # Your LoadMaster’s User’s Password
+LoadMaster_Password = 'Mkapc1n!' # Your LoadMaster’s User’s Password
 LoadMaster_Port = '443' # By default this is 443.
 
 # build the LoadMaster object
@@ -15,6 +15,7 @@ lm = LoadMaster(LoadMaster_IP, LoadMaster_User, LoadMaster_Password, LoadMaster_
 vs_web_services_template = 'Skype Front End Reverse Proxy'
 vs_owa_template = 'Skype Office Web App Servers'
 
+# url for the KEMP SFB template
 template_url = 'https://kemptechnologies.com/files/assets/templates/SfB_2015.tmpl'
 
 # front end servers
@@ -49,7 +50,6 @@ lm.apply_template(ext_web_ip, 80, 'tcp', vs_web_services_template, 'External Web
 lm.apply_template(int_mob_ip, 443, 'tcp', vs_web_services_template, 'Internal Mobility')
 lm.apply_template(int_owa_ip, 443, 'tcp', vs_owa_template, 'Internal OWA')
 lm.apply_template(ext_owa_ip, 443, 'tcp', vs_owa_template, 'External OWA')
-
 
 # store each virtual service in order to add real servers to each
 int_web_vs_http = lm.get_virtual_service(address=int_web_ip, port='80', protocol='tcp')
