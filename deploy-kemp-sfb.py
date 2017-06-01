@@ -1,7 +1,6 @@
-
 # pylint: disable=C0103
 import urllib.request
-from python_kemptech_api import LoadMaster, Template, VirtualService, Certificate
+from python_kemptech_api import LoadMaster
 
 # connection parameters
 LoadMaster_IP = '10.0.3.72' # Your LoadMaster’s administrative IP
@@ -80,4 +79,3 @@ for item in owa_servers:
     int_owa_rs.save()
     ext_owa_rs = ext_owa_vs.create_real_server(item, port=443)
     ext_owa_rs.save()
-
