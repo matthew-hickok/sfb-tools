@@ -56,7 +56,8 @@ for server in rs:
 
 '''
 # Get a single template
-lm.get_template("Skype Mediation HLB Only")
+temp = lm.get_template("Skype Front End Reverse Proxy")
+print(temp.name)
 '''
 
 '''
@@ -73,5 +74,3 @@ for inters in interfaces:
     print(inters)
 '''
 
-# Upload a template
-# lm.upload_template(r'C:\Users\matt.MHICKOK\Downloads\Exchange2010Core.tmpl')
