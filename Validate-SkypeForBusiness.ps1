@@ -18,19 +18,22 @@ $synth_tests = @{   'Test-CsAddressBookService' = 'Address Book Service in Reach
                     'Test-CsAVConference' = 'Conference Established Successfully';
                     'Test-CsIM' = 'IM Sent Successfully'}
 
+# session information
 $cred = (Get-Credential)
-
 $fe_server = $fe_servers | Get-Random
 $fe_session = New-PSSession -ComputerName $fe_server -Credential $cred -Authentication Credssp
-
 $be_session = New-PSSession -ComputerName $be_servers -Credential $cred
+
+# dns
+$fe_ips = ($fe_servers | Resolve-DnsName).IPAddress
+$fe_pools_ips = (Resolve-DnsName $fe_pools).IPAddress
 
 function Test-SynthTransaction ($session, $pool, $test) { 
     $com = Invoke-Command -Session $session -ScriptBlock {param($test,$pool)(Invoke-Expression "$test -TargetFqdn `$pool").Result} -ArgumentList $test,$pool
     return $com.Value
 }
 
-# services                                                                                                                                                                                                                                                                      
+# check that services are running                                                                                                                                                                                                                                                                      
 Describe "Skype for Business Front End Health" {
     Context "Front End Services" {
         foreach ($server in $fe_servers) {
@@ -43,10 +46,7 @@ Describe "Skype for Business Front End Health" {
     }
 }
 
-# dns
-$fe_ips = ($fe_servers | Resolve-DnsName).IPAddress
-$fe_pools_ips = (Resolve-DnsName $fe_pools).IPAddress
-
+# perform dns checks
 Describe "Internal DNS Records" {
     Context "FE Pool Records" {
         foreach ($ip in $fe_ips) {
@@ -110,3 +110,6 @@ Describe "Functional Tests" {
         }
     }
 }
+
+Remove-PSSession -Session $fe_session
+Remove-PSSession -Session $be_session
